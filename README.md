@@ -1,5 +1,9 @@
 ## vue3+vite通用模板
 
+```
+使用yarn进行安装最好
+```
+
 ### 生成脚手架
 
 ```yaml
@@ -311,7 +315,7 @@ npm install -D prettier eslint-config-prettier eslint-plugin-prettier
 
 ```js
 //安装包
-yarn add -D @commitlint/cli @commitlint/config-conventional cz-customizable husky lint-staged
+yarn add -D commitizen@4.2.4 @commitlint/cli@12.1.4  @commitlint/config-conventional@12.1.4 cz-customizable@6.3.0 husky@7.0.1
 //package.json配置:新增如下内容
 "config": {
     "commitizen": {
@@ -326,7 +330,7 @@ yarn add -D @commitlint/cli @commitlint/config-conventional cz-customizable husk
   }
 
 
-//根目录下新增文件.cz-config.js
+//根目录下新增文件.cz-config.cjs,看清楚是cjs
 module.exports = {
   // 可选类型
   types: [
@@ -353,7 +357,7 @@ module.exports = {
 };
 
 
-//根目录下新增commitlint.config.js
+//根目录下新增commitlint.config.cjs,看清楚是cjs
 module.exports = {
   extends: ['@commitlint/config-conventional'], // 定义规则类型
   rules: {
@@ -381,7 +385,13 @@ module.exports = {
 
 
 //生成.husky 文件夹
-npx husky-init
+//package.json添加如下命令
+scripts:{
+    ...,
+    "prepare": "husky install"
+}
+//执行
+yarn prepare
 
 //更改 .husky/pre-commit 文件内容
 #!/bin/sh

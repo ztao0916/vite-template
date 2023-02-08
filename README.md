@@ -22,6 +22,8 @@ pnpm create vite my-vue-app --template vue
 
 ### 环境变量
 
+需要配置哦,待开始
+
 ```
 .env         # 存放不同环境共用的环境变量，定义的变量将被各环境共享
 .env.dev     # 开发环境
@@ -405,5 +407,13 @@ npx lint-staged
 npx --no-install commitlint --edit "$1"
 
 
+```
+
+
+
+### 目录结构
+
+```
+进行中哦
 ```
 

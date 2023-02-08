@@ -304,3 +304,96 @@ npm install -D prettier eslint-config-prettier eslint-plugin-prettier
   "eslintIntegration": true
 }
 ```
+
+
+
+### 代码提交规范
+
+```js
+//安装包
+yarn add -D @commitlint/cli @commitlint/config-conventional cz-customizable husky lint-staged
+//package.json配置:新增如下内容
+"config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+
+
+//根目录下新增文件.cz-config.js
+module.exports = {
+  // 可选类型
+  types: [
+    { value: 'feat', name: 'feat: 新功能' },
+    { value: 'fix', name: 'fix: 修复' },
+    { value: 'docs', name: 'docs: 文档变更' },
+    { value: 'style', name: 'style: 代码格式(不影响代码运行的变动)' },
+    { value: 'revert', name: 'revert: 回退' },
+    { value: 'build', name: 'build: 打包' }
+  ],
+  // 消息步骤
+  messages: {
+    type: '请选择提交类型:',
+    customScope: '请输入修改范围(可选):',
+    subject: '请简要描述提交(必填):',
+    body: '请输入详细描述(可选):',
+    footer: '请输入要关闭的issue(可选):',
+    confirmCommit: '确认使用以上信息提交？(y/n/e/h)'
+  },
+  // 跳过问题
+  skipQuestions: ['body', 'footer'],
+  // subject文字长度默认是72
+  subjectLimit: 72
+};
+
+
+//根目录下新增commitlint.config.js
+module.exports = {
+  extends: ['@commitlint/config-conventional'], // 定义规则类型
+  rules: {
+    // type 类型定义，表示 git 提交的 type 必须在以下类型范围内
+    'type-enum': [
+      2,
+      'always',
+      [
+        'feat', // 新功能 feature
+        'fix', // 修复 bug
+        'docs', // 文档注释
+        'style', // 代码格式(不影响代码运行的变动)
+        'refactor', // 重构(既不增加新功能，也不是修复bug)
+        'perf', // 性能优化
+        'test', // 增加测试
+        'chore', // 构建过程或辅助工具的变动
+        'revert', // 回退
+        'build' // 打包
+      ]
+    ],
+    // subject 大小写不做校验
+    'subject-case': [0]
+  }
+};
+
+
+//生成.husky 文件夹
+npx husky-init
+
+//更改 .husky/pre-commit 文件内容
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+npx lint-staged
+
+//创建 .husky/commit-msg 文件
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx --no-install commitlint --edit "$1"
+
+
+```
+

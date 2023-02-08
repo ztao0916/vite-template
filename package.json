@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "npx eslint --fix"
+    "lint": "npx eslint --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "vue": "^3.2.45"
@@ -15,13 +16,30 @@
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.19.1",
+    "@commitlint/cli": "12.1.4",
+    "@commitlint/config-conventional": "12.1.4",
     "@vitejs/plugin-vue": "^4.0.0",
+    "commitizen": "4.2.4",
+    "cz-customizable": "6.3.0",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.9.0",
+    "husky": "7.0.1",
+    "lint-staged": "^13.1.1",
     "prettier": "^2.8.4",
     "vite": "^4.1.0",
     "vite-plugin-eslint": "^1.8.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }

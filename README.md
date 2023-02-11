@@ -39,12 +39,18 @@ VITE_TOKEN_NAME = 'token'
 
 .env.dev
 
-```
-NODE_ENV = development
+```js
+# 标志
+ENV = 'development'
 
-VITE_BASE_URL = http://wwww.demo.com/api
+# base api
+VITE_APP_BASE_API = '/'
 
-VITE_BASE_PATH = /
+//需要更改一下package.json文件dev: vite
+{
+    dev: "vite --mode dev"
+}
+//通过import.meta.env调用对应的变量
 ```
 
 .env.stage
@@ -415,5 +421,158 @@ npx --no-install commitlint --edit "$1"
 
 ```
 进行中哦
+```
+
+### 前期准备
+
+#### 安装element-plus
+
+参考官网即可
+
+#### 样式处理
+
+1. 浏览器样式统一化
+2. 安装sass,直接`yarn add sass -D`即可,不需要各种解析包,在`assets/scss/variable.scss`定义变量即可直接使用
+
+
+
+#### axios处理
+
+安装
+
+```
+yarn add axios
+```
+
+配置
+
+```js
+//utils/request.js
+import axios from 'axios';
+import { ElMessage, ElMessageBox, ElLoading } from 'element-plus';
+
+// 在全局请求和响应拦截器中添加请求状态
+let loading = null;
+const service = axios.create({
+  baseURL: '/api',
+  timeout: 60000, //10分钟
+  withCredentials: true //携带身份认证文件cookie
+});
+
+service.interceptors.request.use(
+  (config) => {
+    if (config.loading) {
+      loading = ElLoading.service({ text: '拼命加载中' });
+    }
+    return config; //必须返回配置
+  },
+  (error) => {
+    ElMessage.error(error.message);
+    return Promise.reject(error);
+  }
+);
+
+service.interceptors.response.use(
+  (response) => {
+    const { code, msg } = response.data;
+    const { responseType } = response.config;
+    if (loading) loading.close();
+    if (responseType == 'blob') {
+      return response.data;
+    }
+    //要根据code决定下面的操作
+    if (code == '0000') {
+      return response.data;
+    } else {
+      //业务错误
+
+      ElMessageBox.alert(msg || '请求失败', '错误信息', {
+        confirmButtonText: '确认',
+        type: 'error',
+        dangerouslyUseHTMLString: true
+      });
+
+      // ElMessage.error(msg || '请求失败'); //提示错误信息
+      // return Promise.reject(new Error(msg || '请求失败'));
+    }
+  },
+  (error) => {
+    if (loading) loading.close();
+    console.log('错误信息', error);
+    ElMessage.error(error || error.message);
+    return Promise.reject(error);
+  }
+);
+
+export default service;
+```
+
+
+
+
+
+#### mock数据
+
+新建目录
+
+```
+src/mock
+```
+
+安装
+
+```js
+yarn add mock vite-plugin-mock -D
+```
+
+配置`vite.config.js/ts`
+
+```js
+import { viteMockServe } from 'vite-plugin-mock'
+//plugins数组新增配置如下
+viteMockServe({
+ mockPath: '/src/mock',
+ localEnabled: true, // 开发环境设为true,本地开发用
+ prodEnabled: false, // 生产环境设为true,这样可以控制关闭mock的时候不让mock打包到最终代码内
+ injectCode: ` import { setupProdMockServer } from './mockServer'; setupProdMockServer(); `, //注入mock接口
+ logger: false, //是否在控制台显示请求日志
+ supportTs: false, //打开后，可以读取 ts 文件模块.请注意,打开后将无法监视js文件
+ watchFiles: true // 监听文件内容变更
+})
+```
+
+配置文件`src/mockServer.js`
+
+```js
+import { createProdMockServer } from 'vite-plugin-mock/es/createProdMockServer';
+
+// 逐一导入您的mock.js文件
+// 可以使用 import.meta.glob功能来进行全部导入,mock文件夹下创建user.js
+import user from '../mock/user';
+export function setupProdMockServer() {
+  createProdMockServer([...index]);
+}
+//user.js内容
+export default [
+  {
+    url: '/mock/demo',
+    method: 'get',
+    response: () => {
+      return {
+        code: '0000',
+        message: 'ok',
+        'data|12': [
+          {
+            warnBl: 0, // 预警占比
+            'warnLevel|0-3': 0, // 预警等级
+            'warnNum|0-100': 0, // 预警数量
+            'warnTotal|0-100': 0 // 报警数量
+          }
+        ]
+      };
+    }
+  }
+];
+//可以直接使用封装的axios,如果是mock的接口,直接用mock开头,使用环境变量来区分
 ```
 

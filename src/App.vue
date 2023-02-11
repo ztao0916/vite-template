@@ -1,9 +1,13 @@
 <script setup>
-  import Test from '@/components/Test.vue';
+  import Menu from '@/components/Menu.vue';
 </script>
 
 <template>
-  <Test />
+  <Menu class="menu" />
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+  .menu {
+    width: 200px;
+  }
+</style>

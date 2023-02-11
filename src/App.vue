@@ -1,9 +1,13 @@
 <script setup>
-  import HelloWorld from '@/components/HelloWorld.vue';
+  import Menu from '@/components/Menu.vue';
 </script>
 
 <template>
-  <HelloWorld />
+  <Menu class="menu" />
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+  .menu {
+    width: 200px;
+  }
+</style>

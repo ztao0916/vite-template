@@ -1,0 +1,7 @@
+<template>
+  <div>主页-测试路由</div>
+</template>
+
+<script setup></script>
+
+<style lang="scss" scoped></style>

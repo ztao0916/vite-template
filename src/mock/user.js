@@ -1,7 +1,7 @@
 /*
  * @Author: ztao
  * @Date: 2023-02-11 16:37:14
- * @LastEditTime: 2023-02-11 18:18:32
+ * @LastEditTime: 2023-02-12 15:25:16
  * @Description: 固定的三层目录结构
  * isVue==0 表示非最终子节点,不用关注
  * menuType=1 && isVue==1 表示是vue写的页面
@@ -29,6 +29,7 @@ export default [
             menuType: 1, //1表示菜单
             sort: 1, //排序,后端返回的顺序
             icon: 'lock', //图标,但是我们用不到,不需要
+            // checked: true, //表示有权限?这个是加在什么位置?
             sub: [
               {
                 id: 900030,

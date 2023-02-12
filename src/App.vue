@@ -1,5 +1,10 @@
 <script setup>
   import Menu from '@/components/Menu.vue';
+  import { newMenus } from '@/utils/handleMenus';
+
+  newMenus().then((res) => {
+    console.log('app.vue', res);
+  });
 </script>
 
 <template>

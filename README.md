@@ -113,6 +113,19 @@ resolve: {
       '~': nodeResolve('public'),
     },
  }
+    
+//vscode设置搜索files.eol,如果是auto改成\n
+//项目根目录下新建jsconfig.json,内容如下
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": { "@/*": ["src/*"], "_c/*": ["src/components/*"] }
+  },
+  "exclude": ["node_modules", "dist"]
+}
 ```
 
 #### 配置代理 Proxy
@@ -556,3 +569,39 @@ export default [
 ];
 //可以直接使用封装的axios,如果是mock的接口,直接用mock开头,使用环境变量来区分
 ```
+
+#### 菜单栏
+
+一般情况下,菜单栏二级居多,三级也有,四级罕见
+
+我司用的都是三级菜单,对递归这一块依然迷迷糊糊,所以纪录下来,供以后温故
+
+```js
+//element-plus菜单结构
+el-menu 主菜单,整个菜单
+el-sub-menu 子菜单,二级或三级等子集菜单
+el-menu-item 菜单项,最终可做为路由跳转的菜单节点
+//定义路由表对应的菜单规则,需递归处理,menuType=2表示是按钮
+对于单个路由route而言
+1. 如果meta && meta.name || menuType==1,则显示menu菜单
+	1.1 存在sub,就以el-sub-menu展示
+    1.2 不存在sub,以el-menu-item展示
+
+
+//实现路由的两种方案
+1. 在处理路由的时候,生成对应的路由结构,component组件也需要动态处理
+2. 先把所有的动态结构生成好,然后做匹配
+
+仔细思考了一下,好像我用的这种 属于第二种方案的残次品,因为第一种我是根据返回的路由动态加上component,有一些问题,个人不好描述,在思考思考
+```
+
+比较麻烦的如图所示
+
+![](https://cdn.jsdelivr.net/gh/ztao0916/image@main/img/20230212181932.png)
+
+```
+两个树形数组比对 找出相同项
+
+根据本地的全部路由来匹配接口返回的动态路由,最后筛选出匹配的本地路由,这是最终的渲染结果
+```
+

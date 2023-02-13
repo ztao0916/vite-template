@@ -1,7 +1,7 @@
 /*
  * @Author: ztao
  * @Date: 2023-02-11 18:34:44
- * @LastEditTime: 2023-02-12 18:27:02
+ * @LastEditTime: 2023-02-13 15:08:20
  * @Description:
  */
 import { getMenus } from '@/api/user';
@@ -18,15 +18,17 @@ export const getChildrenRoutes = (routes) => {
 };
 
 /**
- * 处理接口返回的菜单数据
- * @param {*} routes 路由参数
+ * 处理接口返回的菜单数据,转换成route结构
+ * @param {*} menus 用户菜单
  * @returns vue-router==>routes结构
  * 思路:
  * 1. route对象参数格式: path, component(暂时不需要,先写好静态的,然后动态匹配), redirect, name, meta, children
  * 2. 先根据写好所有的路由(静态)
  * 3. 使用递归
  */
-// export const generateMenus = (routes) => {};
+export const convertRoutes = (menus) => {
+  console.log(menus);
+};
 
 /**
  * @description: 匹配本地全部路由和接口返回的菜单路由

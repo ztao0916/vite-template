@@ -599,9 +599,27 @@ el-menu-item 菜单项,最终可做为路由跳转的菜单节点
 
 ![](https://cdn.jsdelivr.net/gh/ztao0916/image@main/img/20230212181932.png)
 
-```
-两个树形数组比对 找出相同项
+```js
+//两个树形数组比对 找出相同项
 
-根据本地的全部路由来匹配接口返回的动态路由,最后筛选出匹配的本地路由,这是最终的渲染结果
+//根据本地的全部路由来匹配接口返回的动态路由,最后筛选出匹配的本地路由,这是最终的渲染结果
+
+//代码如下
+export const _arrRoutes = (menus, localRoutes) => {
+  const list = [];
+  localRoutes.filter((item) =>
+    menus.some((ele) => {
+      if (item.sub && item.sub.length) {
+        const routeChild = _arrRoutes(ele.sub ?? [], item.sub ?? []);
+        if (routeChild.length) item.sub = routeChild;
+      }
+      // 筛选条件
+      if (item.name === ele.name && item.uri === ele.uri) {
+        list.push(item);
+      }
+    })
+  );
+  return list;
+};
 ```
 

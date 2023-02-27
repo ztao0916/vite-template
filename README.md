@@ -613,7 +613,7 @@ export const _arrRoutes = (menus, localRoutes) => {
         const routeChild = _arrRoutes(ele.sub ?? [], item.sub ?? []);
         if (routeChild.length) item.sub = routeChild;
       }
-      // 筛选条件
+      // 筛选条件[自定义]
       if (item.name === ele.name && item.uri === ele.uri) {
         list.push(item);
       }
@@ -623,3 +623,16 @@ export const _arrRoutes = (menus, localRoutes) => {
 };
 ```
 
+
+
+### vue细节问题汇总
+
+#### 相同name问题
+
+会导致控制台报警告,这个问题,百度一大串乱七八糟的回复,基本都没用
+
+```yaml
+[Vue Router warn]: No match found for location with path "xxx"
+```
+
+解决办法就是: 让name不一样

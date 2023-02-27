@@ -1,7 +1,7 @@
 /*
  * @Author: ztao
  * @Date: 2023-02-12 15:59:56
- * @LastEditTime: 2023-02-13 15:24:33
+ * @LastEditTime: 2023-02-27 10:59:13
  * @Description: 路由文件
  */
 import { createRouter, createWebHashHistory } from 'vue-router';
@@ -151,6 +151,7 @@ export const asyncRoutes = [
     path: '/:pathMatch(.*)*', // Must put the 'ErrorPage' route at the end, 必须将 'ErrorPage' 路由放在最后
     redirect: '/404',
     name: 'ErrorPage',
+    component: () => import('@/views/404/index.vue'),
     meta: {
       hidden: true
     }
